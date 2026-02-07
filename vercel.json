@@ -1,0 +1,31 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "backend/main.py",
+            "use": "@vercel/python"
+        },
+        {
+            "src": "backend/static/**",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/assets/(.*)",
+            "dest": "backend/static/assets/$1"
+        },
+        {
+            "src": "/vite.svg",
+            "dest": "backend/static/vite.svg"
+        },
+        {
+            "src": "/convert",
+            "dest": "backend/main.py"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "backend/main.py"
+        }
+    ]
+}

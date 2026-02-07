@@ -1,14 +1,16 @@
 # main.py - Standalone Bank Statement Converter
 # Run with: py -m uvicorn main:app --port 8000
+# Deploy to Vercel: vercel --prod
 
 import pdfplumber
 import pandas as pd
 import re
 import shutil
 import os
+import tempfile
 from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse, Response
 from typing import List, Dict, Any
 
 # --- CORE LOGIC (Service Layer) ---
@@ -202,8 +204,9 @@ app = FastAPI(title="Bank Statement Converter")
 
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
-TEMP_DIR = BASE_DIR / "temp"
-TEMP_DIR.mkdir(exist_ok=True)
+
+# Use system temp directory (works on Vercel's read-only filesystem)
+TEMP_DIR = Path(tempfile.gettempdir())
 
 
 @app.post("/convert")
